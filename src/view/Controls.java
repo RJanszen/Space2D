@@ -1,3 +1,4 @@
+// Listen to key event and execute methods accordingly //
 package view;
 
 import java.util.HashMap;
@@ -8,13 +9,13 @@ import player.Ship;
 
 public class Controls {
 
+	// FIELDS //
 	Map<String, Integer> keys = new HashMap<String, Integer>();
 	private Ship spaceship;
-//	private Window frame;
 	private double cooldown;
 	
+	// CONSTRUCTOR //
 	public Controls(Window frame, Ship spaceship) {
-//		this.frame = frame;
 		this.spaceship = spaceship;
 		keys.put("w", 0);
 		keys.put("a", 0);
@@ -25,6 +26,12 @@ public class Controls {
 		keys.put("spc", 0);
 	}
 	
+	// GETTERS AND SETTERS //
+	public boolean getKey(String key) {
+		if (keys.get(key) == 1) return true;
+		else return false;
+	}
+	
 	public void pressKey(String key) {
 		keys.put(key, 1);
 	}
@@ -33,11 +40,7 @@ public class Controls {
 		keys.put(key, 0);
 	}
 	
-	public boolean getKey(String key) {
-		if (keys.get(key) == 1) return true;
-		else return false;
-	}
-	
+	// Check the array for pressed/released buttons, execute operations accordingly //
 	public void updateControls() {
 		// Forward - Backward
 		if (keys.get("w") == 1)
@@ -69,8 +72,6 @@ public class Controls {
 				spaceship.shoot(new Projectile(spaceship.getXloc() + 135, spaceship.getYloc() + 15, spaceship));
 				this.cooldown = System.currentTimeMillis() + spaceship.getFireRate();
 			}
-
 		} else if (keys.get("spc") == 0) spaceship.setShooting(false);
 	}
-	
 }

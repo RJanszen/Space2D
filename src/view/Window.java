@@ -1,3 +1,4 @@
+// Main window where the game will take place, keys are pressed etc //
 package view;
 
 import java.awt.Color;
@@ -17,7 +18,8 @@ import player.Projectile;
 import player.Ship;
 
 public class Window extends JPanel implements KeyListener {
-	
+
+	// FIELDS //
 	private static final long serialVersionUID = 1L;
 	private int windowWidth;
 	private int windowHeight;
@@ -29,6 +31,7 @@ public class Window extends JPanel implements KeyListener {
 	private ArrayList<Booster> recycleBoosters = new ArrayList<Booster>();
 	private double boosterCooldown;
 
+	// MAIN - Setup window, setup keylistener, repaint panel(this.window) each 10ms //
     public static void main(String[] args) throws InterruptedException, IOException {
     	JFrame frame = new JFrame("Space 2D");
         Window test = new Window(700, 1000);
@@ -47,6 +50,7 @@ public class Window extends JPanel implements KeyListener {
         }
     }
     
+    // CONSTRUCTOR //
 	public Window(int width, int height) throws IOException {
 		windowWidth = width;
 		windowHeight = height;
@@ -55,6 +59,7 @@ public class Window extends JPanel implements KeyListener {
 		controls = new Controls(this, spaceship);
     }
 	
+	// GETTERS AND SETTERS //
 	public int getWindowWidth() {
 		return this.windowWidth;
 	}
@@ -67,6 +72,7 @@ public class Window extends JPanel implements KeyListener {
 		return this.flightSpeed;
 	}
 
+	// Paint method overridden to include the following specifications //
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -81,26 +87,30 @@ public class Window extends JPanel implements KeyListener {
         g2d.drawString("Adjust flight speed (q,e)", 10, 70);
         g2d.drawString("Shoot (spacebar)", 10, 90);
         
+        // Update panel components //
         updateAir(g2d);
         updateBoosters(g2d);
         updateCollisions();
-        
         updateSpaceship(g2d);
+        // Update controls //
         controls.updateControls();
     }
     
+    // Make array of stars //
     private void makeAir(int density) {
     	for (int i = 0; i < density; i++) {
     		air.add(new Air(this, 1));
     	}
     }
     
+    // Set new star locations and draw in this.getGraphics() (g) //
     private void updateAir(Graphics g) {
     	for (Air stripe : air) {
     		stripe.update(g);
     	}
     }
     
+    // (Recycle and) Update booster locations and draw (g) //
     private void updateBoosters(Graphics g) {
     	boosters.removeAll(recycleBoosters);
     	recycleBoosters.clear();
@@ -115,12 +125,14 @@ public class Window extends JPanel implements KeyListener {
     	}
     }
     
+    // Find any collisions of projectiles and boosters //
     private void updateCollisions() {
     	for (Projectile proj : spaceship.getProjectiles()) {
     		proj.isCollideBooster(boosters);
     	}
     }
     
+    // Update spaceship location and draw (g) //
     private void updateSpaceship(Graphics g) {
     	spaceship.updateProjectiles(g);
     	int spaceshipX = (int) spaceship.getX();
@@ -132,19 +144,20 @@ public class Window extends JPanel implements KeyListener {
     	}
     }
     
+    // Change window global flight speed //
     public void changeFlightSpeed(double change, int timeMS) {
-    	
     	this.flightSpeed += change;
     	for (Air stripe : air) {
     		stripe.updateSpeed(this.flightSpeed, timeMS);
     	}
     }
 
+    // Remove booster from booster array if it's available //
 	public void recycleBooster(Booster booster) {
 		if (boosters.contains(booster)) recycleBoosters.add(booster);
 	}
     
-
+	// Send recorded key presses when recorded to the controls class //
     @Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_W) {
@@ -164,6 +177,7 @@ public class Window extends JPanel implements KeyListener {
 		}
 	}
 
+    // Send recorded key releases when recorded to the controls class //
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_W)
@@ -182,6 +196,7 @@ public class Window extends JPanel implements KeyListener {
 			controls.releaseKey("spc");
 	}
 
+	// Leave this here but include it to prevent abstract method implementation errors //
 	@Override
 	public void keyTyped(KeyEvent e) {
 		

@@ -1,3 +1,4 @@
+// The spaceship the player is controlling //
 package player;
 
 import java.awt.Graphics;
@@ -12,6 +13,7 @@ import view.Window;
 
 public class Ship {
 	
+	// FIELDS //
 	private float x;
 	private float y;
 	private float horSpeed;
@@ -25,6 +27,7 @@ public class Ship {
 	private double fireRate;
 	private Window frame;
 	
+	// CONSTRUCTOR //
 	public Ship(Window frame, int x, int y) {
 		this.frame = frame;
 		this.x = x;
@@ -41,6 +44,7 @@ public class Ship {
 		}
 	}
 	
+	// GETTERS AND SETTERS
 	public Window getFrame() {
 		return this.frame;
 	}
@@ -88,6 +92,7 @@ public class Ship {
 		this.isShooting = set;
 	}
 	
+	// Move the spaceship horizontally depending on speed and location (can't go out of scope) //
 	public void moveHor(double speed) {
 		if (horSpeed < 0) {
 			if (speed > 0) {
@@ -102,6 +107,7 @@ public class Ship {
 		}
 	}
 	
+	// Move the spaceship vertically depending on speed and location (can't go out of scope) //
 	public void moveVer(double speed) {
 		if (verSpeed < 0) {
 			if (speed > 0) {
@@ -116,11 +122,13 @@ public class Ship {
 		}
 	}
 	
+	// Boolean is the spaceship moving forward //
 	public boolean isForward() {
 		if (verSpeed > 0) return true;
 		else return false;
 	}
 	
+	// Update all projectiles (arraylist projectiles) -> position, draw, collision detection etc. //
 	public void updateProjectiles(Graphics g) {
 		projectiles.removeAll(recycleProjectiles);
 		recycleProjectiles.clear();
@@ -129,10 +137,12 @@ public class Ship {
 		}
 	}
 	
+	// Add new projectiles to the arraylist when shooting //
 	public void shoot(Projectile proj) {
 		this.projectiles.add(proj);
 	}
 	
+	// Recycle projectiles //
 	protected void recycleProjectile(Projectile proj) {
 		this.recycleProjectiles.add(proj);
 	}
